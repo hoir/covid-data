@@ -12,6 +12,8 @@ data in the roadmap.
 - [Confirmed cases in Cambridge](https://data.cambridgema.gov/Public-Health/Confirmed-COVID-19-Cases-in-Cambridge/inw8-ircw)
   - Need to scrape daily to get time series
   - Includes breakdowns by gender, age
+- [Cambridge COVID-19 dashboard](https://cityofcambridge.shinyapps.io/COVID19/)
+  - Includes some data not in API, e.g., cases by neighborhood, but unclear how it could be retrieved
 
 #### Boston (**no data in repo**):
 
