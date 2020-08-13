@@ -37,6 +37,7 @@ Doesn't look like there's easy automated access, especially for historical data.
 - [Case surveillance public use data](https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf) 
   **not in repo**
 - [COVID-19 cases/deaths by state](https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36)
+  - Can use API params to aggregate: <https://data.cdc.gov/resource/9mfq-cb36.json?%24select=submission_date%2C+sum(tot_cases)+AS+tot_cases%2C+sum(new_case)+AS+new_case%2C+sum(tot_death)+AS+tot_death%2C+sum(new_death)+AS+new_death&%24group=submission_date&%24order=submission_date>
 
 #### Other data sources:
 
