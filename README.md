@@ -6,6 +6,14 @@ data in the roadmap.
 
 ### Data sources
 
+**Update:** After looking into this a little more, <https://covidtracking.com>
+is probably the best source for US and state data. They have an API, and for MA
+the numbers from the daily dashboard match. NB 
+- positivity rate does not appear to be calculable using the Covid Tracking
+  data;
+- also, the MA daily dashboard reports new **confirmed** cases, which would need
+  to be constructed by diffing the cumulatives.
+
 #### Cambridge:
 
 - [Cumulative cases by date](https://data.cambridgema.gov/Public-Health/COVID-19-Cumulative-Cases-by-Date/tdt9-vq5y)
