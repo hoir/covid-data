@@ -17,6 +17,23 @@ fetch_ma_weekly <- function(dt = floor_date(today(), unit = "week", week_start =
                                     glue)))
 }
 
+fetch_ma_daily <- function(dt = today(), overwrite = FALSE) {
+  dt <- lubridate::as_date(dt)
+  .date_tag <- dt %.>%
+    format(., "%B-%d-%Y") %.>%
+    str_to_lower
+  .url <- "https://www.mass.gov/doc/covid-19-raw-data-{.date_tag}/download" %.>%
+    glue
+  outfile <- glue(here::here("./data-raw/ma-daily/{dt}.zip"))
+  outdir <- outfile %.>% fs::path_ext_remove
+  resp <- GET(.url, write_disk(outfile, overwrite = overwrite))
+  if (http_error(resp)) {
+    unlink(outfile)
+    stop(http_status(resp))
+  }
+  zip::unzip(outfile, exdir = outdir)
+}
+
 fetch_us_daily <- function(outfile = here::here("./data-raw/covidtracking/us/daily.csv"),
                            overwrite = FALSE){
   GET("https://api.covidtracking.com/v1/us/daily.csv",

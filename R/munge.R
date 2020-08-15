@@ -56,7 +56,7 @@ read_ma_daily <- function(.dir = here("./data-raw//ma-daily/2020-08-12/")){
     mutate(., across(date, lubridate::mdy))
 }
 
-read_ma_daily_tests <- function(.dir = here("./data-raw//ma-daily/2020-08-13/")) {
+read_ma_daily_tests <- function(.dir = here("./data-raw//ma-daily/2020-08-14/")) {
   file.path(.dir, "TestingByDate.csv") %.>%
     read_csv %.>%
     set_names(., to_snake_case) %.>%
