@@ -13,6 +13,8 @@ suppressPackageStartupMessages({
   modules::import(here, here)
   modules::import(readr)
   modules::import(lubridate)
+  modules::import(tidyselect)
+  modules::import(RcppRoll)
 })
 
 .rename_maybe <- function(df){
@@ -68,5 +70,55 @@ read_cambridge_daily <- function(fpath = here("./data-raw/cambridge/daily.csv"))
     set_names(., to_snake_case) %.>%
     mutate(., across(date, mdy)) %.>%
     rename(., positiveCasesViral = cumulative_positive_cases,
-           positiveCasesViralIncrease = new_positive_cases)
+           positiveCasesViralIncrease = new_positive_cases) %.>%
+    mutate(., positiveCasesViral = positiveCasesViral + positiveCasesViralIncrease)
+}
+
+read_ct <- function(fpath){
+  read_csv(fpath, col_type = cols(date = col_character())) %.>%
+    mutate(., across(date, ymd))
+}
+
+add_diff <- function(df, var, .lag = 1L, suffix = "Increase"){
+  var_expr <- enexpr(var)
+  var_chr <- eval_select(var_expr, df, strict = FALSE) %.>%
+    names
+  if (is_empty(var_chr)) return(df)
+  newVarChr <- paste0(var_chr, suffix)
+  if (newVarChr %in% names(df)) {
+    warn(paste0("Column `", newVarChr, "` already exists"))
+    return(df)
+  }
+  df %.>%
+    mutate(., !!newVarChr := !!var_expr - lag(!!var_expr, !!.lag))
+}
+
+add_diffs <- function(df, ...){
+  v_exprs <- enexprs(...)
+  reduce(v_exprs, ~ add_diff(.x, !!.y), .init = df)
+}
+
+add_diffs_default <- function(df) {
+  df <- df %.>% arrange(., date)
+  add_diffs(df, deathConfirmed, totalTestsViral,
+            positiveCasesViral)
+}
+
+add_rolling <- function(df){
+  .vars <- exprs(positiveIncrease,
+                 positiveCasesViralIncrease,
+                 deathIncrease,
+                 inIcuCurrently,
+                 onVentilatorCurrently,
+                 deathConfirmedIncrease)
+  .vars_existing_chr <- eval_select(expr(c(!!!.vars)), df, strict = FALSE) %.>%
+    names
+  .idx <- .vars %.>% as.character %.>% match(.vars_existing_chr, .)
+  .vars_existing <- .vars[.idx]
+  df <- df %.>%
+    arrange(., date)
+  .new_cols <- df %.>% select(., !!!.vars_existing) %.>%
+    mutate(., across(everything(), ~ roll_meanr(.x, 7L))) %.>%
+    set_names(., ~ paste0(.x, "7d"))
+  bind_cols(df, .new_cols)
 }
