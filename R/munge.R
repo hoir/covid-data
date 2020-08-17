@@ -122,3 +122,33 @@ add_rolling <- function(df){
     set_names(., ~ paste0(.x, "7d"))
   bind_cols(df, .new_cols)
 }
+
+.pct_chg <- function(x, .lag = 7L) {
+  y1 <- log(x)
+  y0 <- lag(y1, n = .lag)
+  exp(y1 - y0) - 1
+}
+
+add_delta7d <- function(df) {
+  .vars_chr <- eval_select(quote(c(ends_with("7d"))), df, strict = FALSE) %.>%
+    names
+  .newNames <- .vars_chr %.>%
+    to_upper_camel_case %.>%
+    paste0("d", .) %.>%
+    str_replace(., "7D$", "7d")
+  .newNames <- .vars_chr := .newNames
+  delta_df <- df %.>%
+    select(., group_cols(), date, !!!syms(.vars_chr)) %.>%
+    arrange(., date) %.>%
+    mutate(., across(c(!!!syms(.vars_chr)), .pct_chg)) %.>%
+    set_names(., ~ .newNames[.x] %?% .x)
+  df %.>%
+    left_join(., delta_df)
+}
+
+add_vars_all <- function(df){
+  df %.>%
+    add_diffs_default %.>%
+    add_rolling %.>%
+    add_delta7d
+}

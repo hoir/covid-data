@@ -4,6 +4,19 @@ Data repository for COVID-19 data in Cambridge, MA area. Raw files from original
 sources (listed below) are in the `data-raw/` directory. Scripts and processed
 data in the roadmap.
 
+## Processed data
+
+Processed data is in the `data/` directory. Preliminary plan is to follow the
+structure of the covidtracking API.
+
+Calculated variables:
+
+- Diffs/increases for more variables, in particular confirmed cases/deaths
+- 7-day averages for a number of metrics
+  - Suffixed with `7d`, are all 7-day means (multiply by 7 for weekly counts
+    when desired)
+- Rate of change of 7d averages, named `d[OriginalVariable]7d`
+
 ### Data sources
 
 **Update:** After looking into this a little more, <https://covidtracking.com>
