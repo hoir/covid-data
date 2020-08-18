@@ -64,7 +64,7 @@ Doesn't look like there's easy automated access, especially for historical data.
 
 Github repos:
 
-- NYTimes
+- NYTimes: <https://github.com/nytimes/covid-19-data>
 - JHU
-- Covidtracking
-
+- Covidtracking: <https://api.covidtracking.com>
+- CovidActNow.org: <https://data.covidactnow.org>
