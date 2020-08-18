@@ -4,6 +4,15 @@ Data repository for COVID-19 data in Cambridge, MA area. Raw files from original
 sources (listed below) are in the `data-raw/` directory. Scripts and processed
 data in the roadmap.
 
+## Updating data
+
+The process is automated-ish using R `drake`.
+
+To install dependencies, run `renv::restore()`.
+
+To update data, run `r_make()`. Actually need to double-check that this will
+download the latest files...
+
 ## Processed data
 
 Processed data is in the `data/` directory. Preliminary plan is to follow the
