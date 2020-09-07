@@ -9,7 +9,8 @@ suppressPackageStartupMessages({
 
 fetch_ma_weekly <- function(dt = floor_date(today(), unit = "week", week_start = 3)){
   .date_tag <- dt %.>%
-    format(., "%B-%d-%Y") %.>%
+    format(., "%B-%e-%Y") %.>%
+    str_replace_all(., " ", "") %.>%
     str_to_lower
   .url <- "https://www.mass.gov/doc/weekly-public-health-report-raw-data-{.date_tag}/download" %.>%
     glue
@@ -20,7 +21,8 @@ fetch_ma_weekly <- function(dt = floor_date(today(), unit = "week", week_start =
 fetch_ma_daily <- function(dt = today(), overwrite = FALSE) {
   dt <- lubridate::as_date(dt)
   .date_tag <- dt %.>%
-    format(., "%B-%d-%Y") %.>%
+    format(., "%B-%e-%Y") %.>%
+    str_replace_all(., " ", "") %.>%
     str_to_lower
   .url <- "https://www.mass.gov/doc/covid-19-raw-data-{.date_tag}/download" %.>%
     glue
