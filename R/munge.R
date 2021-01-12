@@ -39,12 +39,17 @@ read_ma_cities <- function(){
     map(., function(.f){
       filename <- fs::path_file(.f) %.>%
         fs::path_ext_remove
+      sheetNames <- openxlsx::getSheetNames(.f)
+      cityTownSheet <- sheetNames %.>%
+        detect(., ~ str_detect(.x, "(?i)city_town"))
       dt <- str_extract(.f, "\\d{4}-\\d{2}-\\d{2}") %.>%
         lubridate::ymd
-      out <- readWorkbook(.f, na.strings = "*", sheet = "City_Town_Data") %.>%
+      out <- readWorkbook(.f, na.strings = "*", sheet = cityTownSheet) %.>%
         set_names(., to_snake_case) %.>%
         .rename_maybe %.>%
         mutate(., date = dt)
+      out %.>%
+        mutate(., across(where(is.numeric), as.character))
     })
   dl %.>%
     bind_rows %.>%
