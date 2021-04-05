@@ -12,7 +12,7 @@ fetch_ma_weekly <- function(dt = floor_date(today(), unit = "week", week_start =
     format(., "%B-%e-%Y") %.>%
     str_replace_all(., " ", "") %.>%
     str_to_lower
-  .url <- "https://www.mass.gov/doc/weekly-public-health-report-raw-data-{.date_tag}/download" %.>%
+  .url <- "https://www.mass.gov/doc/weekly-covid-19-public-health-report-raw-data-{.date_tag}/download" %.>%
     glue
   GET(.url, write_disk(here::here("./data-raw/ma-weekly/weekly-dashboard-data-{dt}.xlsx" %.>%
                                     glue)))
