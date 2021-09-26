@@ -58,6 +58,13 @@
       "Repository": "CRAN",
       "Hash": "84a03997fbb5acfb3c9b43bad88fea1f"
     },
+    "arrow": {
+      "Package": "arrow",
+      "Version": "5.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2b09a5d420c3dbcdfe72db10fb29c7e6"
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.1",
@@ -507,10 +514,16 @@
     },
     "nlme": {
       "Package": "nlme",
-      "Version": "3.1-152",
-      "Source": "Repository",
+      "Version": "3.1-153",
+      "Source": "CRAN",
       "Repository": "CRAN",
-      "Hash": "35de1ce639f20b5e10f7f46260730c65"
+      "RemoteType": "standard",
+      "RemotePkgRef": "nlme",
+      "RemoteRef": "nlme",
+      "RemoteRepos": "https://cran.rstudio.com/",
+      "RemotePkgPlatform": "macos",
+      "RemoteSha": "3.1-153",
+      "Hash": "2d632e0d963a653a0329756ce701ecdd"
     },
     "openssl": {
       "Package": "openssl",

@@ -1,0 +1,47 @@
+---
+title: "COVID19 Data"
+author: "Office of Institutional Research"
+date: "8/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tibble)
+library(tidyverse)
+
+.weekly_city_town <- openxlsx::read.xlsx("./data-raw/ma-daily/2021-09-24.xlsx",
+                                         sheet = "Weekly_City_Town",
+                                         na.strings = c("NA", "", "*"),
+                                         detectDates = TRUE) %>%
+  as_tibble() %>%
+  set_names(snakecase::to_any_case, numerals = "left") %>%
+  filter(city_town != "Unknown")
+
+.ma_higher_ed <- openxlsx::read.xlsx("./data-raw/ma-daily/2021-09-24.xlsx",
+                                     sheet = "HigherEd_CasesandTests",
+                                     na.strings = c("NA", "", "*"),
+                                     detectDates = TRUE) %>%
+  as_tibble() %>%
+  set_names(snakecase::to_any_case, numerals = "left")
+```
+
+```{r}
+.df <- .weekly_city_town %>%
+  transmute(city_town,
+            county,
+            population,
+            average_daily_rate,
+            total_tests,
+            total_tests_last_two_weeks,
+            total_positive_tests,
+            percent_positivity,
+            report_date,
+            start_date,
+            end_date) %>%
+  mutate(across(where(is.character), factor))
+
+arrow::write_feather(.df, "./ma_weekly_city_town.feather", compression = "uncompressed")
+```
+
